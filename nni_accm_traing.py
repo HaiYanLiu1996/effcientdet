@@ -376,12 +376,12 @@ class Fitter:
                     scaled_loss.backward()
             else:
                 loss.backward()
-				
-			if (step+1) % self.accumulate == 0:
+
+            if (step+1) % self.accumulate == 0:
                 self.optimizer.step()
                 self.optimizer.zero_grad()
             summary_loss.update(loss.detach().item(), batch_size)
-			#变化5
+            #变化5
             #loss.backward()
 
             #summary_loss.update(loss.detach().item(), batch_size)
