@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
@@ -251,7 +253,7 @@ class Fitter:
         self.device = device
 		
 		#变化2：
-		self.mixed_precision = config.mixed_precision
+	self.mixed_precision = config.mixed_precision
         self.accumulate = config.accumulate
 		
 		
@@ -280,7 +282,7 @@ class Fitter:
             self.optimizer = torch.optim.SparseAdam(self.model.parameters(), lr=config.lr)
 		
 		#变化7
-		self.model = model.to(device)
+	self.model = model.to(device)
         if self.mixed_precision:
             self.model, self.optimizer = amp.initialize(self.model, self.optimizer, opt_level="O1", verbosity=0)
 
@@ -370,7 +372,7 @@ class Fitter:
 
             loss, _, _ = self.model(images, boxes, labels)
 			#变化4
-			if self.mixed_precision:
+	    if self.mixed_precision:
                 with amp.scale_loss(loss, self.optimizer) as scaled_loss:
                     scaled_loss.backward()
             else:
@@ -426,7 +428,7 @@ class TrainGlobalConfig:
     lr = 0.0004
 
 	#变化6
-	mixed_precision = True
+    mixed_precision = True
     accumulate = 16
 	
     folder = '/content/gdrive/My Drive/Colab Notebooks/globalwheat/input/efficientdet-pytorch-master/effdet5-cutmix-test'
