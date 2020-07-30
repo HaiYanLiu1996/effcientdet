@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
@@ -251,12 +249,12 @@ class Fitter:
 
         self.model = model
         self.device = device
-		
-		#变化2：
-	self.mixed_precision = config.mixed_precision
+
+        #变化2
+        self.mixed_precision = config.mixed_precision
         self.accumulate = config.accumulate
-		
-		
+
+
         param_optimizer = list(self.model.named_parameters())
         no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
         optimizer_grouped_parameters = [
@@ -280,12 +278,11 @@ class Fitter:
             self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=config.lr)
         elif optimizer=="SparseAdam":
             self.optimizer = torch.optim.SparseAdam(self.model.parameters(), lr=config.lr)
-		
-		#变化7
-	self.model = model.to(device)
+
+        #变化7
+        self.model = model.to(device)
         if self.mixed_precision:
             self.model, self.optimizer = amp.initialize(self.model, self.optimizer, opt_level="O1", verbosity=0)
-
 
         self.scheduler = config.SchedulerClass(self.optimizer, **config.scheduler_params)
         self.log(f'Fitter prepared. Device is {self.device}')
@@ -366,26 +363,26 @@ class Fitter:
             batch_size = images.shape[0]
             boxes = [target['boxes'].to(self.device).float() for target in targets]
             labels = [target['labels'].to(self.device).float() for target in targets]
-			
-			#变化3
+
+            
+            #变化3
             #self.optimizer.zero_grad()
 
             loss, _, _ = self.model(images, boxes, labels)
-			#变化4
-	    if self.mixed_precision:
+
+            #变化4
+            if self.mixed_precision:
                 with amp.scale_loss(loss, self.optimizer) as scaled_loss:
                     scaled_loss.backward()
             else:
                 loss.backward()
-
-            if (step+1) % self.accumulate == 0:
+				
+			if (step+1) % self.accumulate == 0:
                 self.optimizer.step()
                 self.optimizer.zero_grad()
-
             summary_loss.update(loss.detach().item(), batch_size)
-            
 			#变化5
-			#loss.backward()
+            #loss.backward()
 
             #summary_loss.update(loss.detach().item(), batch_size)
 
@@ -425,12 +422,11 @@ class TrainGlobalConfig:
     num_workers = 2
     batch_size = 2
     n_epochs = 5 # n_epochs = 40
-    lr = 0.0004
-
-	#变化6
+    lr = 0.0002
+    #变化6
     mixed_precision = True
     accumulate = 16
-	
+
     folder = '/content/gdrive/My Drive/Colab Notebooks/globalwheat/input/efficientdet-pytorch-master/effdet5-cutmix-test'
 
     # -------------------
