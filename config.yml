@@ -16,7 +16,7 @@ tuner:
     #choice: maximize, minimize
     optimize_mode: minimize
 trial:
-  command: python3 nni_gwd_traing.py
+  command: python3 nni_accm_traing.py
   codeDir: .
   gpuNum: 1
 localConfig:
