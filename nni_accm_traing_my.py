@@ -292,7 +292,7 @@ class Fitter:
             SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
             scheduler_params = dict(
                 max_lr=0.001,
-                epochs=n_epochs,
+                epochs=config.n_epochs,
                 steps_per_epoch=int(len(train_dataset) / batch_size),
                 pct_start=0.1,
                 anneal_strategy='cos',
