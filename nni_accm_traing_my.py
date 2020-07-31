@@ -293,7 +293,7 @@ class Fitter:
             scheduler_params = dict(
                 max_lr=0.001,
                 epochs=config.n_epochs,
-                steps_per_epoch=int(len(train_dataset) / batch_size),
+                steps_per_epoch=int(len(train_dataset) / config.batch_size),
                 pct_start=0.1,
                 anneal_strategy='cos',
                 final_div_factor=10**5
