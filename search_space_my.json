@@ -6,6 +6,6 @@
     "val_shift_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
     "brightness_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
     "contrast_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
-    "num_holes":{"_type":"choice", "_value":[4, 8,10,12]}
+    "num_holes":{"_type":"choice", "_value":[4, 8,10,12]},
     "SchedulerClass":{"_type":"choice", "_value":["OneCycleLR", "ReduceLROnPlateau"]}
 }
