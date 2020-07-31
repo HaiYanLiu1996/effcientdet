@@ -287,7 +287,7 @@ class Fitter:
 		
 		
 		#自己添加下面的学习率调整策略
-		SchedulerClass = params['SchedulerClass']
+        SchedulerClass = params['SchedulerClass']
         if SchedulerClass == "OneCycleLR"
             SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
             scheduler_params = dict(
