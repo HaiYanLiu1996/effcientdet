@@ -1,0 +1,10 @@
+{
+    "lr":{"_type":"choice", "_value":[0.0001, 0.0002, 0.0004, 0.001,0.005]},
+    "optimizer":{"_type":"choice", "_value":["SGD", "ASGD", "Adagrad", "Adadelta", "RMSprop", "Adam","AdamW", "SparseAdam"]},
+    "hue_shift_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
+    "sat_shift_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
+    "val_shift_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
+    "brightness_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
+    "contrast_limit":{"_type":"choice", "_value":[0.1, 0.2, 0.3, 0.4]},
+    "num_holes":{"_type":"choice", "_value":[4, 8,10,12]}
+}
