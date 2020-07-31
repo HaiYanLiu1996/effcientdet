@@ -288,7 +288,7 @@ class Fitter:
 		
 		#自己添加下面的学习率调整策略
         SchedulerClass = params['SchedulerClass']
-        if SchedulerClass == "OneCycleLR"
+        if SchedulerClass == "OneCycleLR":
             SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
             scheduler_params = dict(
                 max_lr=0.001,
@@ -299,7 +299,7 @@ class Fitter:
                 final_div_factor=10**5
                 )
             self.scheduler = SchedulerClass(self.optimizer, **scheduler_params) 				
-        elif SchedulerClass == "ReduceLROnPlateau"
+        elif SchedulerClass == "ReduceLROnPlateau":
             SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
             scheduler_params = dict(
                 mode='min',
