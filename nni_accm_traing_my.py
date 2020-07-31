@@ -283,8 +283,39 @@ class Fitter:
         self.model = model.to(device)
         if self.mixed_precision:
             self.model, self.optimizer = amp.initialize(self.model, self.optimizer, opt_level="O1", verbosity=0)
-
-        self.scheduler = config.SchedulerClass(self.optimizer, **config.scheduler_params)
+		
+		
+		
+		#自己添加下面的学习率调整策略
+		SchedulerClass = params['SchedulerClass']
+        if SchedulerClass == "OneCycleLR"
+            SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
+            scheduler_params = dict(
+                max_lr=0.001,
+                epochs=n_epochs,
+                steps_per_epoch=int(len(train_dataset) / batch_size),
+                pct_start=0.1,
+                anneal_strategy='cos',
+                final_div_factor=10**5
+                )
+            self.scheduler = SchedulerClass(self.optimizer, **scheduler_params) 				
+        elif SchedulerClass == "ReduceLROnPlateau"
+            SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
+            scheduler_params = dict(
+                mode='min',
+                factor=0.5,
+                patience=1,
+                verbose=False,
+                threshold=0.0001,
+                threshold_mode='abs',
+                cooldown=0,
+                min_lr=1e-8,
+                eps=1e-08
+                )
+            self.scheduler = SchedulerClass(self.optimizer, **scheduler_params)				
+        #自己修改学习策略，注释掉下面一行
+		#self.scheduler = config.SchedulerClass(self.optimizer, **config.scheduler_params)
+		
         self.log(f'Fitter prepared. Device is {self.device}')
 
     def fit(self, train_loader, validation_loader):
@@ -438,28 +469,30 @@ class TrainGlobalConfig:
     step_scheduler = False  # do scheduler.step after optimizer.step
     validation_scheduler = True  # do scheduler.step after validation stage loss
 
-    #     SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
-    #     scheduler_params = dict(
-    #         max_lr=0.001,
-    #         epochs=n_epochs,
-    #         steps_per_epoch=int(len(train_dataset) / batch_size),
-    #         pct_start=0.1,
-    #         anneal_strategy='cos',
-    #         final_div_factor=10**5
-    #     )
+    # 自己修改学习策略
+	
+	# SchedulerClass = torch.optim.lr_scheduler.OneCycleLR
+    # scheduler_params = dict(
+            # max_lr=0.001,
+            # epochs=n_epochs,
+            # steps_per_epoch=int(len(train_dataset) / batch_size),
+            # pct_start=0.1,
+            # anneal_strategy='cos',
+            # final_div_factor=10**5
+        # )
 
-    SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
-    scheduler_params = dict(
-        mode='min',
-        factor=0.5,
-        patience=1,
-        verbose=False,
-        threshold=0.0001,
-        threshold_mode='abs',
-        cooldown=0,
-        min_lr=1e-8,
-        eps=1e-08
-    )
+    # SchedulerClass = torch.optim.lr_scheduler.ReduceLROnPlateau
+    # scheduler_params = dict(
+        # mode='min',
+        # factor=0.5,
+        # patience=1,
+        # verbose=False,
+        # threshold=0.0001,
+        # threshold_mode='abs',
+        # cooldown=0,
+        # min_lr=1e-8,
+        # eps=1e-08
+    # )
     # --------------------
 
 def collate_fn(batch):
@@ -500,7 +533,7 @@ def get_net():
     checkpoint = torch.load(r'/content/gdrive/My Drive/Colab Notebooks/globalwheat/input/efficientdet-pytorch-master/efficientdet_d5-ef44aea8.pth')
     net.load_state_dict(checkpoint)
     config.num_classes = 1
-    config.image_size = 512
+    config.image_size = 1024
     net.class_net = HeadNet(config, num_outputs=config.num_classes, norm_kwargs=dict(eps=.001, momentum=.01))
     return DetBenchTrain(net, config)
 if __name__ == '__main__':
